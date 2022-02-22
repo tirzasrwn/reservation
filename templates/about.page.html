@@ -1,0 +1,31 @@
+{{template "base" .}}
+
+{{define "content"}}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>
+                This is about page.
+            </h1>
+            <p>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, rerum, eveniet distinctio ullam
+                omnis qui mollitia doloremque aliquam eius neque amet ad debitis numquam quaerat saepe enim officia
+                et. Earum!
+            </p>
+            <p>
+                Today's quote: {{index .StringMap "quote"}}
+            </p>
+            <p>
+                {{if ne (index .StringMap "remote_ip") ""}}
+                    Your remote IP is {{index .StringMap "remote_ip"}}
+                {{else}}
+                    I don't know yout remote IP yet. Please visit the <a href="/">Home Page</a> so I can set it!
+                {{end}}
+            </p>
+            <p>
+                This came from the template: {{index .StringMap "testAbout"}}
+            </p>
+        </div>
+    </div>
+</div>
+{{end}}
