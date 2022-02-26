@@ -52,25 +52,40 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reservation renders the make a reservation page and displays form.
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "make-reservation.page.html", &models.TemplateData{})
+	stringMap := make(map[string]string)
+	render.RenderTemplate(w, "make-reservation.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
 }
 
 // Generals renders the room page.
 func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "generals.page.html", &models.TemplateData{})
+	stringMap := make(map[string]string)
+	render.RenderTemplate(w, "generals.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
 }
 
 // Majors renders the room page.
 func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "majors.page.html", &models.TemplateData{})
+	stringMap := make(map[string]string)
+	render.RenderTemplate(w, "majors.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
 }
 
 // Availability renders the search availability page.
 func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "search-availability.page.html", &models.TemplateData{})
+	stringMap := make(map[string]string)
+	render.RenderTemplate(w, "search-availability.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
 }
 
 // Contact renders the search availability page.
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "contact.page.html", &models.TemplateData{})
+	stringMap := make(map[string]string)
+	render.RenderTemplate(w, "contact.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
 }
