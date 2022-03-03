@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/tirzasrwn/reservation/internal/config"
+	"github.com/tirzasrwn/reservation/internal/forms"
 	"github.com/tirzasrwn/reservation/internal/models"
 	"github.com/tirzasrwn/reservation/internal/render"
 )
@@ -58,7 +59,13 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
 		StringMap: stringMap,
+		Form:      forms.New(nil),
 	})
+}
+
+// PostReservation handles the posting of a reservation form.
+func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	log.Println("Posted")
 }
 
 // Generals renders the room page.
