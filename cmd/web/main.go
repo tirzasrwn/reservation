@@ -67,4 +67,4 @@ func run() error {
 	return err
 }
 
-// run: $go run cmd/web/*.go
+// go run $(ls cmd/web/*.go | grep -v _test.go)
