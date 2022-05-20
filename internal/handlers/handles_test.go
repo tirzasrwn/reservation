@@ -19,6 +19,12 @@ var theTest = []struct {
 	expectedStatusCode int
 }{
 	{"home", "/", "GET", []postData{}, http.StatusOK},
+	{"about", "/about", "GET", []postData{}, http.StatusOK},
+	{"gq", "/generals-quarters", "GET", []postData{}, http.StatusOK},
+	{"ms", "/majors-suite", "GET", []postData{}, http.StatusOK},
+	{"sa", "/search-availability", "GET", []postData{}, http.StatusOK},
+	{"contact", "/contact", "GET", []postData{}, http.StatusOK},
+	{"mr", "/make-reservation", "GET", []postData{}, http.StatusOK},
 }
 
 func TestHandler(t *testing.T) {
