@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"testing"
 
@@ -15,6 +14,6 @@ func TestRoutes(t *testing.T) {
 	case http.Handler:
 		// Do nothing, test passed!
 	default:
-		t.Error(fmt.Sprintf("Type is not http.Handler, but type is %T.", v))
+		t.Errorf("Type is not http.Handler, but type is %T.", v)
 	}
 }
