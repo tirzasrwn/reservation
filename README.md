@@ -11,6 +11,9 @@ go mod tidy
 
 ```sh
 go run $(ls cmd/web/*.go | grep -v _test.go)
+# Or just run run.sh script.
+chmod +x run.sh
+./run.sh
 ```
 ### Test
 
@@ -23,6 +26,6 @@ go test -coverprofile=coverage.out && go tool cover -html=coverage.out # Same as
 ```
 Example
 ```sh
-# From root level project, go to interna/handlers/
+# From root level project, go to internal/handlers/
 go test -v
 ```
