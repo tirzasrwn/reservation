@@ -65,5 +65,6 @@ go install github.com/gobuffalo/pop/v6/soda@latest
 soda generate fizz CreateUserTable
 soda migrate # Up migration.
 soda migrate down # Down migration.
+soda generate fizz CreateReservationTable
 ```
 
