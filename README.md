@@ -66,5 +66,6 @@ soda generate fizz CreateUserTable
 soda migrate # Up migration.
 soda migrate down # Down migration.
 soda generate fizz CreateReservationTable
+soda reset # Drop the database and recreate it.
 ```
 
