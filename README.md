@@ -58,3 +58,12 @@ sudo systemctl restart postgresql
 nmap <ip-adress> -p5432
 ```
 
+### Install soda
+https://gobuffalo.io/documentation/database/soda/  
+```sh
+go install github.com/gobuffalo/pop/v6/soda@latest
+soda generate fizz CreateUserTable
+soda migrate # Up migration.
+soda migrate down # Down migration.
+```
+
