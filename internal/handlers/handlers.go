@@ -43,7 +43,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
 	stringMap := make(map[string]string)
 	stringMap["testHome"] = "Hello, again. We are in home page."
-	render.RenderTemplate(w, r, "home.page.html", &models.TemplateData{
+	render.Template(w, r, "home.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 }
@@ -54,7 +54,7 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	stringMap["testAbout"] = "Hello, again. We are in about page"
 	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
-	render.RenderTemplate(w, r, "about.page.html", &models.TemplateData{
+	render.Template(w, r, "about.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 }
@@ -65,7 +65,7 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	var emptyReservation models.Reservation
 	data := make(map[string]interface{})
 	data["reservation"] = emptyReservation
-	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+	render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
 		StringMap: stringMap,
 		Form:      forms.New(nil),
 		Data:      data,
@@ -93,7 +93,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
 		stringMap := make(map[string]string)
-		render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+		render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
 			StringMap: stringMap,
 			Form:      form,
 			Data:      data,
@@ -107,7 +107,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 // Generals renders the room page.
 func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
-	render.RenderTemplate(w, r, "generals.page.html", &models.TemplateData{
+	render.Template(w, r, "generals.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 }
@@ -115,7 +115,7 @@ func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
 // Majors renders the room page.
 func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
-	render.RenderTemplate(w, r, "majors.page.html", &models.TemplateData{
+	render.Template(w, r, "majors.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 }
@@ -123,7 +123,7 @@ func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
 // Availability renders the search availability page.
 func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
-	render.RenderTemplate(w, r, "search-availability.page.html", &models.TemplateData{
+	render.Template(w, r, "search-availability.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 }
@@ -158,7 +158,7 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 // Contact renders the search availability page.
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
-	render.RenderTemplate(w, r, "contact.page.html", &models.TemplateData{
+	render.Template(w, r, "contact.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 }
@@ -175,7 +175,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	data := make(map[string]interface{})
 	data["reservation"] = reservation
 	stringMap := make(map[string]string)
-	render.RenderTemplate(w, r, "reservation-summary.page.html", &models.TemplateData{
+	render.Template(w, r, "reservation-summary.page.html", &models.TemplateData{
 		StringMap: stringMap,
 		Data:      data,
 	})
