@@ -10,6 +10,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/tirzasrwn/reservation/internal/config"
+	"github.com/tirzasrwn/reservation/internal/driver"
 	"github.com/tirzasrwn/reservation/internal/handlers"
 	"github.com/tirzasrwn/reservation/internal/helpers"
 	"github.com/tirzasrwn/reservation/internal/models"
@@ -25,10 +26,12 @@ var errorLog *log.Logger
 
 // main is the main application function
 func main() {
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	defer db.SQL.Close()
 
 	srv := &http.Server{
 		Addr:    portNumber,
@@ -39,7 +42,7 @@ func main() {
 	log.Fatal(err)
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	// What am I going to put in the session.
 	gob.Register(models.Reservation{})
 	// change this to true when in production
@@ -58,23 +61,31 @@ func run() error {
 
 	app.Session = session
 
+	// Connect to database.
+	log.Println("Connecting to database ...")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=reservation user=postgres password=postgres")
+	if err != nil {
+		log.Fatal("Cannot connect to database! Dying ... T___T")
+	}
+	log.Println("Connected to database.")
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("Cannot create template cache")
-		return err
+		return nil, err
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 	render.NewTemplates(&app)
 	helpers.NewHelpers(&app)
 
 	fmt.Printf("Starting application on port %s\n", portNumber)
 
-	return err
+	return db, nil
 }
 
 // go run $(ls cmd/web/*.go | grep -v _test.go)
