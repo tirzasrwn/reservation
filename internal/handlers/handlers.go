@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/tirzasrwn/reservation/internal/config"
 	"github.com/tirzasrwn/reservation/internal/driver"
@@ -79,11 +81,26 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
+	sd := r.Form.Get("start_date")
+	ed := r.Form.Get("end_date")
+	layout := "2006-01-02"
+	startDate, err := time.Parse(layout, sd)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+	endDate, err := time.Parse(layout, ed)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
 	reservation := models.Reservation{
 		FirstName: r.Form.Get("first_name"),
 		LastName:  r.Form.Get("last_name"),
 		Email:     r.Form.Get("email"),
 		Phone:     r.Form.Get("phone"),
+		StartDate: startDate,
+		EndDate:   endDate,
+		RoomID:    roomID,
 	}
 	form := forms.New(r.PostForm)
 	form.Required("first_name", "last_name", "email")
@@ -99,6 +116,10 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 			Data:      data,
 		})
 		return
+	}
+	err = m.DB.InsertReservation(reservation)
+	if err != nil {
+		helpers.ServerError(w, err)
 	}
 	m.App.Session.Put(r.Context(), "reservation", reservation)
 	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
