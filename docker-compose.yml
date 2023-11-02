@@ -1,0 +1,25 @@
+version: "3"
+name: "reservation"
+services:
+  postgres:
+    build:
+      context: ./db
+      dockerfile: ./db/Dockerfile
+    ports:
+      - "5432:5432"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    volumes:
+      - ./db/data/postgres/:/var/lib/postgresql/data
+  web-app:
+    build:
+    context: ./
+    dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - "4000:4000"
+    deploy:
+      mode: replicated
+      replicas: 1

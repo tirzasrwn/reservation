@@ -3,3 +3,4 @@ coverage.out
 reservation
 schema.sql
 database.yml
+data/

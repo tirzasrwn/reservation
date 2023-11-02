@@ -1,0 +1,5 @@
+ALTER TABLE room_restrictions
+DROP CONSTRAINT room_restrictions_rooms_id_fk;
+
+ALTER TABLE room_restrictions
+DROP CONSTRAINT room_restrictions_restrictions_id_fk;
