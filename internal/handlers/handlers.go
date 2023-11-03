@@ -64,14 +64,30 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reservation renders the make a reservation page and displays form.
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	stringMap := make(map[string]string)
-	var emptyReservation models.Reservation
+  res, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+  if !ok {
+    helpers.ServerError(w, fmt.Errorf("cannot cast to reservation models"))
+    return
+  }
+  room, err := m.DB.GetRoomByID(res.RoomID)
+  if err != nil {
+    helpers.ServerError(w, err)
+    return
+  }
+  res.Room.RoomName = room.RoomName
 	data := make(map[string]interface{})
-	data["reservation"] = emptyReservation
+	data["reservation"] = res
+  
+  stringMap := make(map[string]string)
+  sd := res.StartDate.Format(time.DateOnly)
+  ed := res.EndDate.Format(time.DateOnly)
+  stringMap["start_date"] = sd
+  stringMap["end_date"] = ed
+  
 	render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
-		StringMap: stringMap,
 		Form:      forms.New(nil),
 		Data:      data,
+    StringMap: stringMap,
 	})
 }
 
@@ -84,13 +100,12 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	}
 	sd := r.Form.Get("start_date")
 	ed := r.Form.Get("end_date")
-	layout := "2006-01-02"
-	startDate, err := time.Parse(layout, sd)
+	startDate, err := time.Parse(time.DateOnly, sd)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	endDate, err := time.Parse(layout, ed)
+	endDate, err := time.Parse(time.DateOnly, ed)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -174,13 +189,12 @@ func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	start := r.Form.Get("start")
 	end := r.Form.Get("end")
-	layout := "2006-01-02"
-	startDate, err := time.Parse(layout, start)
+	startDate, err := time.Parse(time.DateOnly, start)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	endDate, err := time.Parse(layout, end)
+	endDate, err := time.Parse(time.DateOnly, end)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
