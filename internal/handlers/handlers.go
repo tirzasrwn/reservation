@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/tirzasrwn/reservation/internal/config"
 	"github.com/tirzasrwn/reservation/internal/driver"
 	"github.com/tirzasrwn/reservation/internal/forms"
@@ -250,4 +252,20 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 		StringMap: stringMap,
 		Data:      data,
 	})
+}
+
+func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
+  roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
+  if err != nil {
+    helpers.ServerError(w, err)
+    return
+  }
+  res, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+  if !ok {
+    helpers.ServerError(w, fmt.Errorf("cannot cast to reservation models"))
+    return
+  }
+  res.RoomID = roomID
+  m.App.Session.Put(r.Context(), "reservation", res)
+  http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
 }
