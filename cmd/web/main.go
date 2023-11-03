@@ -24,7 +24,6 @@ var session *scs.SessionManager
 var infoLog *log.Logger
 var errorLog *log.Logger
 
-// main is the main application function
 func main() {
 	db, err := run()
 	if err != nil {
@@ -48,7 +47,8 @@ func run() (*driver.DB, error) {
 	gob.Register(models.User{})
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
-	// change this to true when in production
+
+	// Change this to true when in production
 	app.InProduction = false
 
 	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
@@ -68,13 +68,14 @@ func run() (*driver.DB, error) {
 	log.Println("Connecting to database ...")
 	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=reservation user=postgres password=postgres")
 	if err != nil {
-		log.Fatal("Cannot connect to database! Dying ... T___T")
+		fmt.Println("Cannot connect to the database!")
+		return nil, err
 	}
 	log.Println("Connected to database.")
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
-		log.Fatal("Cannot create template cache")
+		fmt.Println("Cannot create template cache!")
 		return nil, err
 	}
 
@@ -90,5 +91,3 @@ func run() (*driver.DB, error) {
 
 	return db, nil
 }
-
-// go run $(ls cmd/web/*.go | grep -v _test.go)
