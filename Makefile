@@ -1,10 +1,19 @@
 start:
 	go build -o reservation cmd/web/*.go && ./reservation
 
-docker_build:
+docker_webapp_build:
 	docker build . -t reservation
-docker_start:
+docker_webapp_start:
 	docker run --name reservation -p 4545:4545 -d reservation
-docker_stop:
+docker_webapp_stop:
 	docker stop reservation
 	docker rm reservation
+
+docker_db_build:
+	docker build ./db/ -t reservation-postgres
+docker_db_start:
+	docker run --name reservation-postgres -p 5432:5432 -v ./db/data/postgres/:/var/lib/postgresql/data -d reservation-postgres
+docker_db_stop:
+	docker stop reservation-postgres
+	docker rm reservation-postgres
+
