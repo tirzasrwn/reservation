@@ -1,36 +1,51 @@
 # reservation
 
+## About
+
+An implementation of web application in go. Using room reservation for study case.
+
 ## Setup
+
 ```sh
 go mod tidy
 ```
+
+## Requirement
+
+- make
+- go
+- postgresql
 
 ## Running
 
 ### Web Application
 
 ```sh
-go run $(ls cmd/web/*.go | grep -v _test.go)
-# Or just run run.sh script.
-chmod +x run.sh
-./run.sh
+go run ./cmd/web/
+# Or just use the Makefile
+make
 ```
+
 ### Test
 
 ```sh
 # Go to inside the directory part you want to test
 go test -v
-go test -cover # To look pecentage of covarage test.
-go test -coverprofile=coverage.out && go tool cover -html=coverage.out # Same as cover but with more detail and html format.
+# To look pecentage of covarage test.
+go test -cover
+# Same as cover but with more detail and html format.
+go test -coverprofile=coverage.out && go tool cover -html=coverage.out
 
 ```
+
 Example
+
 ```sh
 # From root level project, go to internal/handlers/
 go test -v
 ```
 
-### Setup Postgressql LInux Debian
+### Setup Postgresql Linux Debian
 
 ```sh
 sudo apt update
@@ -44,6 +59,7 @@ user:~$ sudo -i -u postgres
 postgres@user:~$ psql
 postgres=# ALTER USER postgres PASSWORD 'mynewpassword';
 ```
+
 Make it open to public.
 
 ```sh
@@ -58,14 +74,14 @@ sudo systemctl restart postgresql
 nmap <ip-adress> -p5432
 ```
 
-### Install soda
-https://gobuffalo.io/documentation/database/soda/  
+### Setup Postgresql using Docker
+
 ```sh
-go install github.com/gobuffalo/pop/v6/soda@latest
-soda generate fizz CreateUserTable
-soda migrate # Up migration.
-soda migrate down # Down migration.
-soda generate fizz CreateReservationTable
-soda reset # Drop the database and recreate it.
+make docker_db_build
+make docker_db_start
+make docker_db_stop
 ```
 
+### Running database migration
+
+[Read this documentation.](./migrations/readme.md)
