@@ -1,3 +1,3 @@
 INSERT INTO restrictions(restriction_name) 
-VALUES ('Reservation');
+VALUES ('Reservation'), ('Owner Block');
 
