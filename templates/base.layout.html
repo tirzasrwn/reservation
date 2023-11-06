@@ -96,7 +96,6 @@
 
 
     <script>
-        let attention = Prompt();
 
         (function () {
             'use strict';
@@ -204,22 +203,24 @@
 
             async function custom(c) {
                 const {
+                    icon = "",
                     msg = "",
                     title = "",
+                    showConfirmButton = true,
                 } = c;
 
                 const {value: result} = await Swal.fire({
+                    icon: icon,
                     title: title,
                     html: msg,
                     backdrop: false,
                     focusConfirm: false,
                     showCancelButton: true,
+                    showConfirmButton: showConfirmButton,
                     willOpen: () => {
-                        const elem = document.getElementById('reservation-dates-modal');
-                        const rp = new DateRangePicker(elem, {
-                            format: 'yyyy-mm-dd',
-                            showOnFocus: true,
-                        })
+                      if (c.willOpen !== undefined) {
+                        c.willOpen();
+                      } 
                     },
                     preConfirm: () => {
                         return [
@@ -256,6 +257,8 @@
                 custom: custom,
             }
         }
+    let attention = Prompt();
+
     </script>
 
     </body>
