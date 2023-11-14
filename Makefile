@@ -12,7 +12,7 @@ docker_webapp_stop:
 docker_db_build:
 	docker build ./db/ -t reservation-postgres
 docker_db_start:
-	docker run --name reservation-postgres -p 5432:5432 -v ./db/data/postgres/:/var/lib/postgresql/data -d reservation-postgres
+	docker run --name reservation-postgres -p 5432:5432 -v "./../tmp/db/data/postgres/:/var/lib/postgresql/data:Z" -d reservation-postgres
 docker_db_stop:
 	docker stop reservation-postgres
 	docker rm reservation-postgres
