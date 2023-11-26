@@ -1,5 +1,6 @@
 .vscode/
 coverage.out
+coverage.html
 reservation
 schema.sql
 database.yml

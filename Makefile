@@ -1,5 +1,11 @@
 start:
-	go build -o reservation cmd/web/*.go && ./reservation
+	go build -o reservation cmd/web/*.go 
+	./reservation
+
+test:
+	-go test -coverprofile=coverage.out ./...
+	-go tool cover -html=coverage.out ./coverage.html
+	-open coverage.html
 
 docker_webapp_build:
 	docker build . -t reservation
