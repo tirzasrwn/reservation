@@ -3,8 +3,9 @@ start:
 	./reservation
 
 test:
+	-rm coverage.out coverage.html
 	-go test -coverprofile=coverage.out ./...
-	-go tool cover -html=coverage.out ./coverage.html
+	-go tool cover -html=coverage.out -o ./coverage.html
 	-open coverage.html
 
 docker_webapp_build:
