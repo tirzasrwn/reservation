@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -255,6 +256,46 @@ func TestRepository_PostReservation(t *testing.T) {
 		t.Errorf("PostReservation handler returned wrong status code for insert restriction into database. got %d but wanted %d.", rr.Code, http.StatusTemporaryRedirect)
 	}
 
+}
+
+func TestRepository_AvailabilityJSON(t *testing.T) {
+	// first case - room are not available
+	reqBody := ""
+	params := map[string]string{
+		"start_date": "2050-01-01",
+		"end_date":   "2050-01-02",
+		"first_name": "John",
+		"last_name":  "Smith",
+		"email":      "john@smith.com",
+		"phone":      "123456",
+		"room_id":    "1",
+	}
+	reqBody = constructReqBody(params)
+
+	// create request
+	req, _ := http.NewRequest("POST", "/search-availability-json", strings.NewReader(reqBody))
+
+	// get context with session
+	ctx := getCtx(req)
+	req = req.WithContext(ctx)
+
+	// set http request handler
+	req.Header.Set("Content-Type", "x-www-form-urlencoded")
+
+	// make handler handlerfunc
+	handler := http.HandlerFunc(Repo.AvailabilityJSON)
+
+	// get response recorder
+	rr := httptest.NewRecorder()
+
+	// make request to handler
+	handler.ServeHTTP(rr, req)
+
+	var j jsonResponse
+	err := json.Unmarshal([]byte(rr.Body.String()), &j)
+	if err != nil {
+		t.Error("failed to parse json")
+	}
 }
 
 func getCtx(req *http.Request) context.Context {
