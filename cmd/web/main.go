@@ -19,10 +19,12 @@ import (
 
 const portNumber = ":4545"
 
-var app config.AppConfig
-var session *scs.SessionManager
-var infoLog *log.Logger
-var errorLog *log.Logger
+var (
+	app      config.AppConfig
+	session  *scs.SessionManager
+	infoLog  *log.Logger
+	errorLog *log.Logger
+)
 
 func main() {
 	db, err := run()
@@ -31,6 +33,10 @@ func main() {
 	}
 
 	defer db.SQL.Close()
+
+	defer close(app.MailChan)
+	listenForMail()
+	fmt.Println("Start mail listener...")
 
 	srv := &http.Server{
 		Addr:    portNumber,
@@ -47,6 +53,9 @@ func run() (*driver.DB, error) {
 	gob.Register(models.User{})
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
+
+	mailChan := make(chan models.MailData)
+	app.MailChan = mailChan
 
 	// Change this to true when in production
 	app.InProduction = false

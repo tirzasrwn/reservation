@@ -333,7 +333,6 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
-
 }
 
 // Contact renders the search availability page.
@@ -399,7 +398,6 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	m.App.Session.Put(r.Context(), "reservation", res)
 
 	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
-
 }
 
 // BookRoom takes URL params, build a session variable, and takes user to make res screen.
