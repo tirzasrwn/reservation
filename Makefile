@@ -24,3 +24,11 @@ docker_db_stop:
 	docker stop reservation-postgres
 	docker rm reservation-postgres
 
+docker_mailhog_build:
+	docker build ./mailhog/ -t reservation-mailhog
+docker_mailhog_start:
+	docker run --name reservation-mailhog -p 1025:1025 -p 8025:8025 -d reservation-mailhog
+docker_mailhog_stop:
+	docker stop reservation-mailhog
+	docker rm reservation-mailhog
+
