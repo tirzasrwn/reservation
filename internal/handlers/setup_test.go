@@ -20,10 +20,12 @@ import (
 	"github.com/tirzasrwn/reservation/internal/render"
 )
 
-var app config.AppConfig
-var session *scs.SessionManager
-var pathToTemplates = "./../../templates"
-var functions = template.FuncMap{}
+var (
+	app             config.AppConfig
+	session         *scs.SessionManager
+	pathToTemplates = "./../../templates"
+	functions       = template.FuncMap{}
+)
 
 func TestMain(m *testing.M) {
 	// What am I going to put in the session.
@@ -44,6 +46,12 @@ func TestMain(m *testing.M) {
 
 	app.Session = session
 
+	mailChan := make(chan models.MailData)
+	app.MailChan = mailChan
+	defer close(mailChan)
+
+	listenForMail()
+
 	tc, err := CreateTestTemplateCache()
 	if err != nil {
 		log.Fatal("Cannot create template cache", err)
@@ -57,6 +65,14 @@ func TestMain(m *testing.M) {
 	render.NewRenderer(&app)
 
 	os.Exit(m.Run())
+}
+
+func listenForMail() {
+	go func() {
+		for {
+			_ = <-app.MailChan
+		}
+	}()
 }
 
 func getRoutes() http.Handler {
@@ -107,7 +123,6 @@ func SessionLoad(next http.Handler) http.Handler {
 
 // CreateTestTemplateCache creates a template cache as a map.
 func CreateTestTemplateCache() (map[string]*template.Template, error) {
-
 	myCache := map[string]*template.Template{}
 
 	pages, err := filepath.Glob(fmt.Sprintf("%s/*.page.html", pathToTemplates))
