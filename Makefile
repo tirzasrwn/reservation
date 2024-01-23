@@ -8,6 +8,8 @@ test:
 	-go tool cover -html=coverage.out -o ./coverage.html
 	-open coverage.html
 
+restart: docker_db_stop docker_mailhog_stop docker_db_start docker_mailhog_start
+
 docker_webapp_build:
 	docker build . -t reservation
 docker_webapp_start:
