@@ -18,9 +18,9 @@ export POSTGRESQL='postgres://user:password@host:port/dbname?sslmode=disable'
 # Example:
 export POSTGRESQL='postgres://postgres:postgres@localhost:5432/reservation?sslmode=disable'
 # Create migration step:
-migrate create -ext sql -dir migration/ -seq create_user_table
+migrate create -ext sql -dir migrations/ -seq create_user_table
 # Migrate up:
-migrate -database ${POSTGRESQL} -path migration/ up
+migrate -database ${POSTGRESQL} -path migrations/ up
 # Migrate down:
-migrate -database ${POSTGRESQL} -path migration/ down
+migrate -database ${POSTGRESQL} -path migrations/ down
 ```

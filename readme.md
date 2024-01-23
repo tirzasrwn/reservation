@@ -14,7 +14,7 @@ go mod tidy
 
 - make
 - go
-- postgresql
+- docker
 
 ## Running
 
@@ -28,6 +28,8 @@ make
 
 ### Test
 
+- Manual command
+
 ```sh
 # Go to inside the directory part you want to test
 go test -v
@@ -36,6 +38,12 @@ go test -cover
 # Same as cover but with more detail and html format.
 go test -coverprofile=coverage.out && go tool cover -html=coverage.out
 
+```
+
+- Using make
+
+```sh
+make test
 ```
 
 Example
@@ -85,3 +93,20 @@ make docker_db_stop
 ### Running database migration
 
 [Read this documentation.](./migrations/readme.md)
+
+### Setup Mailhog using Docker
+
+```sh
+make docker_mailhog_build
+make docker_mailhog_start
+make docker_mailhog_stop
+```
+
+## Account
+
+- login page
+
+  ```
+  email: admin@admin.com
+  password: admin
+  ```
