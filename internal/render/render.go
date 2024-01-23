@@ -35,6 +35,9 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 	td.Error = app.Session.PopString(r.Context(), "error")
 	td.Warning = app.Session.PopString(r.Context(), "warning")
 	td.CSRFToken = nosurf.Token(r)
+	if app.Session.Exists(r.Context(), "user_id") {
+		td.IsAuthenticated = 1
+	}
 	return td
 }
 
@@ -75,7 +78,6 @@ func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.Te
 
 // CreateTemplateCache creates a template cache as a map.
 func CreateTemplateCache() (map[string]*template.Template, error) {
-
 	myCache := map[string]*template.Template{}
 
 	pages, err := filepath.Glob(fmt.Sprintf("%s/*.page.html", pathToTemplates))
