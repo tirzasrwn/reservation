@@ -5,3 +5,4 @@ reservation
 schema.sql
 database.yml
 data/
+node_modules/
