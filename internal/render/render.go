@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"text/template"
+	"time"
 
 	"github.com/justinas/nosurf"
 	"github.com/tirzasrwn/reservation/internal/config"
@@ -16,13 +17,22 @@ import (
 
 var (
 	pathToTemplates string = "./templates"
-	functions              = template.FuncMap{}
-	app             *config.AppConfig
+
+	functions = template.FuncMap{
+		"humanDate": HumanDate,
+	}
+
+	app *config.AppConfig
 )
 
 // NewRenderer sets the config for the template package.
 func NewRenderer(a *config.AppConfig) {
 	app = a
+}
+
+// HumanDate returns time in YYYY-mm-dd.
+func HumanDate(t time.Time) string {
+	return t.Format(time.DateOnly)
 }
 
 // AddDefaultData adds data for all templates.
