@@ -642,6 +642,7 @@ func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Re
 
 	nextMonth := next.Format("01")
 	nextMonthYear := next.Format("2006")
+
 	lastMonth := last.Format("01")
 	lastMonthYear := last.Format("2006")
 
@@ -650,6 +651,7 @@ func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Re
 	stringMap["next_month_year"] = nextMonthYear
 	stringMap["last_month"] = lastMonth
 	stringMap["last_month_year"] = lastMonthYear
+
 	stringMap["this_month"] = now.Format("01")
 	stringMap["this_month_year"] = now.Format("2006")
 
@@ -691,11 +693,11 @@ func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Re
 			if y.ReservationID > 0 {
 				// It is a reservation.
 				for d := y.StartDate; d.After(y.EndDate) == false; d = d.AddDate(0, 0, 1) {
-					reservationMap["2006-01-2"] = y.RestrictionID
+					reservationMap[d.Format("2006-01-2")] = y.ReservationID
 				}
 			} else {
 				// It is a block.
-				blockMap[y.StartDate.Format("2006-01-2")] = y.RestrictionID
+				blockMap[y.StartDate.Format("2006-01-2")] = y.ID
 			}
 		}
 
