@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/spf13/viper"
 	"github.com/tirzasrwn/reservation/internal/config"
 	"github.com/tirzasrwn/reservation/internal/driver"
 	"github.com/tirzasrwn/reservation/internal/handlers"
@@ -16,8 +17,6 @@ import (
 	"github.com/tirzasrwn/reservation/internal/models"
 	"github.com/tirzasrwn/reservation/internal/render"
 )
-
-const portNumber = ":4545"
 
 var (
 	app      config.AppConfig
@@ -27,6 +26,10 @@ var (
 )
 
 func main() {
+	err := initializeAppConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
 	db, err := run()
 	if err != nil {
 		log.Fatal(err)
@@ -39,7 +42,7 @@ func main() {
 	fmt.Println("Start mail listener...")
 
 	srv := &http.Server{
-		Addr:    portNumber,
+		Addr:    fmt.Sprintf("localhost:%d", app.Port),
 		Handler: routes(&app),
 	}
 
@@ -76,7 +79,8 @@ func run() (*driver.DB, error) {
 
 	// Connect to database.
 	log.Println("Connecting to database ...")
-	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=reservation user=postgres password=postgres")
+	db, err := driver.ConnectSQL(fmt.Sprintf("host=%s port=%d dbname=%s user=%s password=%s",
+		app.DBHost, app.DBPort, app.DBName, app.DBUser, app.DBPassword))
 	if err != nil {
 		fmt.Println("Cannot connect to the database!")
 		return nil, err
@@ -97,7 +101,29 @@ func run() (*driver.DB, error) {
 	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
 
-	fmt.Printf("Starting application on port %s\n", portNumber)
+	fmt.Printf("Starting application on port %d\n", app.Port)
 
 	return db, nil
+}
+
+func initializeAppConfig() error {
+	viper.SetConfigFile(".env")
+	viper.SetConfigType("env")
+	viper.AddConfigPath(".")
+	viper.AllowEmptyEnv(false)
+	err := viper.ReadInConfig()
+	if err != nil {
+		return err
+	}
+
+	app.Port = viper.GetInt("PORT")
+	app.DBUser = viper.GetString("DB_USER")
+	app.DBName = viper.GetString("DB_NAME")
+	app.DBPassword = viper.GetString("DB_PASSWORD")
+	app.DBHost = viper.GetString("DB_HOST")
+	app.DBPort = viper.GetInt("DB_PORT")
+
+	log.Println("[INIT] configuration loaded")
+
+	return nil
 }

@@ -17,4 +17,11 @@ type AppConfig struct {
 	InProduction  bool
 	Session       *scs.SessionManager
 	MailChan      chan models.MailData
+
+	Port       int
+	DBName     string
+	DBUser     string
+	DBPassword string
+	DBHost     string
+	DBPort     int
 }
