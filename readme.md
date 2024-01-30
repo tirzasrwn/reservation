@@ -53,6 +53,11 @@ Example
 go test -v
 ```
 
+- Note
+
+  Please put .env file inside ./cmd/web while running test. I still not yet found how to
+  make viper find the .env in ./. Please let me know if you do.
+
 ### Setup Postgresql Linux Debian
 
 ```sh

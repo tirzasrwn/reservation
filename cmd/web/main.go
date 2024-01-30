@@ -110,6 +110,8 @@ func initializeAppConfig() error {
 	viper.SetConfigFile(".env")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(".")
+	viper.AddConfigPath("./..")
+	viper.AddConfigPath("./../..")
 	viper.AllowEmptyEnv(false)
 	err := viper.ReadInConfig()
 	if err != nil {

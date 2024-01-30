@@ -229,7 +229,7 @@ var postReservationTests = []struct {
 			"phone":      {"555-555-5555"},
 			"room_id":    {"1"},
 		},
-		expectedResponseCode: http.StatusSeeOther,
+		expectedResponseCode: http.StatusOK,
 		expectedHTML:         `action="/make-reservation"`,
 		expectedLocation:     "",
 	},

@@ -1,11 +1,17 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestRun(t *testing.T) {
-	_, err := run()
+	err := initializeAppConfig()
 	if err != nil {
-		t.Error("Failed run()")
+		t.Fatal("Failed initializeAppConfig()", err)
+	}
+	_, err = run()
+	if err != nil {
+		t.Fatal("Failed run()", err)
 	}
 }
 
