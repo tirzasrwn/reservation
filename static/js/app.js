@@ -1,89 +1,49 @@
-// Prompt is our JavaScript module for all alerts, notifications, and custom popup dialogs
-function Prompt() {
-  let toast = function (c) {
-    const { msg = "", icon = "success", position = "top-end" } = c;
+// app.js
+//
+(function () {
+  "use strict";
+  window.addEventListener(
+    "load",
+    function () {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      let forms = document.getElementsByClassName("needs-validation");
+      // Loop over them and prevent submission
+      Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener(
+          "submit",
+          function (event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add("was-validated");
+          },
+          false,
+        );
+      });
+    },
+    false,
+  );
+})();
 
-    const Toast = Swal.mixin({
-      toast: true,
-      title: msg,
-      position: position,
-      icon: icon,
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener("mouseenter", Swal.stopTimer);
-        toast.addEventListener("mouseleave", Swal.resumeTimer);
-      },
-    });
+function createAutoDismissNotification(msg, msgType) {
+  // Set the modal title
+  var modalTitle = document.getElementById("notificationModalLabel");
+  modalTitle.innerHTML = msgType;
 
-    Toast.fire({});
-  };
+  // Set the modal body content
+  var modalBody = document.getElementById("notificationModalBody");
+  modalBody.innerHTML = msg;
 
-  let success = function (c) {
-    const { msg = "", title = "", footer = "" } = c;
+  // Add the 'show' class to the modal to make it visible
+  var notificationModal = new bootstrap.Modal(
+    document.getElementById("notificationModal"),
+  );
+  notificationModal.show();
 
-    Swal.fire({
-      icon: "success",
-      title: title,
-      text: msg,
-      footer: footer,
-    });
-  };
-
-  let error = function (c) {
-    const { msg = "", title = "", footer = "" } = c;
-
-    Swal.fire({
-      icon: "error",
-      title: title,
-      text: msg,
-      footer: footer,
-    });
-  };
-
-  async function custom(c) {
-    const { icon = "", msg = "", title = "", showConfirmButton = true } = c;
-
-    const { value: result } = await Swal.fire({
-      icon: icon,
-      title: title,
-      html: msg,
-      backdrop: false,
-      focusConfirm: false,
-      showCancelButton: true,
-      showConfirmButton: showConfirmButton,
-      willOpen: () => {
-        if (c.willOpen !== undefined) {
-          c.willOpen();
-        }
-      },
-      didOpen: () => {
-        if (c.didOpen !== undefined) {
-          c.didOpen();
-        }
-      },
-    });
-
-    if (result) {
-      if (result.dismiss !== Swal.DismissReason.cancel) {
-        if (result.value !== "") {
-          if (c.callback !== undefined) {
-            c.callback(result);
-          }
-        } else {
-          c.callback(false);
-        }
-      } else {
-        c.callback(false);
-      }
-    }
-  }
-
-  return {
-    toast: toast,
-    success: success,
-    error: error,
-    custom: custom,
-  };
+  // Close the modal after a specified duration (e.g., 10 seconds)
+  setTimeout(function () {
+    // Hide the modal using Bootstrap's hide method
+    notificationModal.hide();
+  }, 10000);
 }
