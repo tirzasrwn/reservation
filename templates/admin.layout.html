@@ -13,112 +13,127 @@
       />
     </head>
     <body class="d-flex flex-column min-vh-100">
-      <nav class="navbar navbar-dark bg-dark fixed-top">
-        <div class="w-100">
-          <div class="d-flex">
-            <div class="me-auto p-2">
-              <button
-                class="navbar-brand navbar-toggler"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasDarkNavbar"
-                aria-controls="offcanvasDarkNavbar"
-                aria-label="Toggle navigation"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-list"
-                  viewBox="0 0 16 16"
+      <div class="row">
+        <nav class="navbar navbar-dark bg-dark fixed-top">
+          <div class="w-100">
+            <div class="d-flex">
+              <div class="me-auto p-2">
+                <button
+                  class="navbar-brand navbar-toggler"
+                  type="button"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasDarkNavbar"
+                  aria-controls="offcanvasDarkNavbar"
+                  aria-label="Toggle navigation"
                 >
-                  <path
-                    fill-rule="evenodd"
-                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
-                  />
-                </svg>
-              </button>
-              <a class="navbar-brand">Admin Dashboard</a>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-list"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+                    />
+                  </svg>
+                </button>
+                <a class="navbar-brand">Admin Dashboard</a>
+              </div>
+              <div class="p-2">
+                <a class="btn btn-outline-secondary mx-2" href="/"
+                  >Public Site</a
+                >
+                <a class="btn btn-danger mx-2" href="/user/logout">Logout</a>
+              </div>
             </div>
-            <div class="p-2">
-              <a class="btn btn-outline-secondary mx-2" href="/">Public Site</a>
-              <a class="btn btn-danger mx-2" href="/user/logout">Logout</a>
+
+            <div
+              class="offcanvas offcanvas-start text-bg-dark"
+              tabindex="-1"
+              id="offcanvasDarkNavbar"
+              aria-labelledby="offcanvasDarkNavbarLabel"
+            >
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">
+                  Menu
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close btn-close-white"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                  <li class="nav-item">
+                    <a
+                      class="nav-link active"
+                      aria-current="page"
+                      href="/admin/dashboard"
+                      >Dashboard</a
+                    >
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a
+                      class="nav-link dropdown-toggle active"
+                      href="#"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Reservations
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                      <li>
+                        <a class="dropdown-item" href="/admin/reservations-new"
+                          >New Reservations</a
+                        >
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="/admin/reservations-all"
+                          >All Reservations</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item active">
+                    <a
+                      class="nav-link active"
+                      aria-current="page"
+                      href="/admin/reservations-calendar"
+                      >Reservation Calendar</a
+                    >
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-
-          <div
-            class="offcanvas offcanvas-start text-bg-dark"
-            tabindex="-1"
-            id="offcanvasDarkNavbar"
-            aria-labelledby="offcanvasDarkNavbarLabel"
-          >
-            <div class="offcanvas-header">
-              <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">
-                Menu
-              </h5>
-              <button
-                type="button"
-                class="btn-close btn-close-white"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="offcanvas-body">
-              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li class="nav-item">
-                  <a
-                    class="nav-link active"
-                    aria-current="page"
-                    href="/admin/dashboard"
-                    >Dashboard</a
-                  >
-                </li>
-                <li class="nav-item dropdown">
-                  <a
-                    class="nav-link dropdown-toggle active"
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Reservations
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-dark">
-                    <li>
-                      <a class="dropdown-item" href="/admin/reservations-new"
-                        >New Reservations</a
-                      >
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/admin/reservations-all"
-                        >All Reservations</a
-                      >
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item active">
-                  <a
-                    class="nav-link active"
-                    aria-current="page"
-                    href="/admin/reservations-calendar"
-                    >Reservation Calendar</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <div class="mx-5">
+        </nav>
+      </div>
+      <!-- spacing after navbar -->
+      <div class="row mx-5">
+        <hr />
+      </div>
+      <div class="row mx-5">
+        <hr />
+      </div>
+      <div class="row mx-5">
+        <hr />
+      </div>
+      <div class="row mx-5">
         <hr />
       </div>
 
-      <main class="mt-5 p-4">
-        {{ block "content" . }}
-        {{ end }}
-      </main>
+      <div class="row m-1 p-3">
+        <main class="">
+          {{ block "content" . }}
+          {{ end }}
+        </main>
+      </div>
 
       <footer class="mt-auto pt-5">
         <div class="text-center text-light bg-dark">
