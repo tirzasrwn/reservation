@@ -519,6 +519,7 @@ func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	_ = m.App.Session.Destroy(r.Context())
 	_ = m.App.Session.RenewToken(r.Context())
+	m.App.Session.Put(r.Context(), "flash", "log out successfully")
 
 	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
@@ -727,7 +728,6 @@ func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Re
 		Data:      data,
 		IntMap:    intMap,
 	})
-
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
