@@ -116,7 +116,8 @@
               window.location.href="/book-room?id=" + data.room_id + '&s=' + data.start_date + '&e=' + data.end_date;
             }
           } else {
-            alert("Room not available!");
+            // alert("Room not available!");
+            createAutoDismissNotification("Room not available!", "error");
           }
       })
       .catch(error => {
