@@ -8,12 +8,12 @@ New Reservations
 {{ end }}
 
 {{ define "content" }}
-<div class="row">
+<div class="row" style="min-height: 700px;">
   <div class="col">
     {{ $res := index .Data "reservations" }}
     {{ $total_page := index .StringMap "total_page" }}
     {{ $current_page := index .StringMap "current_page" }}
-    <table class="table table-striped table-hover" id="new-res">
+    <table class="table table-striped table-hover table-bordered border-dark" id="new-res">
       <thead>
         <tr>
           <th>ID</th>
@@ -41,35 +41,30 @@ New Reservations
 </div>
 
 <div class="row">
-  <div class="col"></div>
-  <div class="col">
-    <nav aria-label="navigation">
-      <ul class="pagination">
+  <nav aria-label="navigation">
+    <ul class="pagination justify-content-center">
 
-        <li class="page-item">
-          <a class="page-link {{if eq $current_page "1"}} disabled {{end}}"
-            href="/admin/reservations-new/{{subtract (stringToInt $current_page) 1}}" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
+      <li class="page-item">
+        <a class="page-link {{if eq $current_page "1"}} disabled {{end}}"
+          href="/admin/reservations-new/{{subtract (stringToInt $current_page) 1}}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
 
-        {{range $t := stringNumberIterate $total_page}}
-        <li class="page-item {{if eq . (stringToInt $current_page)}} active {{end}}">
-          <a class="page-link" href="/admin/reservations-new/{{.}}">{{.}}</a>
-        </li>
-        {{end}}
+      {{range $t := stringNumberIterate $total_page}}
+      <li class="page-item {{if eq . (stringToInt $current_page)}} active {{end}}">
+        <a class="page-link" href="/admin/reservations-new/{{.}}">{{.}}</a>
+      </li>
+      {{end}}
 
-        <li class="page-item">
-          <a class="page-link {{if eq $current_page $total_page}} disabled {{end}}"
-            href="/admin/reservations-new/{{add (stringToInt $current_page) 1}}" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-  <div class="col"></div>
-</div>
+      <li class="page-item">
+        <a class="page-link {{if eq $current_page $total_page}} disabled {{end}}"
+          href="/admin/reservations-new/{{add (stringToInt $current_page) 1}}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
 </div>
 {{ end }}
 
