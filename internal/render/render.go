@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"strconv"
+	"strings"
 	"text/template"
 	"time"
 
@@ -19,10 +21,14 @@ var (
 	pathToTemplates string = "./templates"
 
 	functions = template.FuncMap{
-		"humanDate":  HumanDate,
-		"formatDate": FormatDate,
-		"iterate":    Iterate,
-		"add":        Add,
+		"humanDate":               HumanDate,
+		"formatDate":              FormatDate,
+		"iterate":                 Iterate,
+		"add":                     Add,
+		"stringNumberIterate":     StringNumberIterate,
+		"stringToInt":             StringToInt,
+		"subtract":                Subtract,
+		"changeUnderscoreToSlash": ChangeUnderscoreToSlash,
 	}
 
 	app *config.AppConfig
@@ -53,9 +59,38 @@ func Iterate(count int) []int {
 	return items
 }
 
+// input number in string will return slice of int.
+func StringNumberIterate(s string) []int {
+	count, _ := strconv.Atoi(s)
+	var items []int
+	for i := 0; i < count; i++ {
+		items = append(items, i+1)
+	}
+	return items
+}
+
 // Add adds beetwen two number.
 func Add(a, b int) int {
 	return a + b
+}
+
+// Subtract beetwen two number.
+func Subtract(a, b int) int {
+	if a > b {
+		return a - b
+	}
+	return b - a
+}
+
+// Convert string to int.
+func StringToInt(s string) int {
+	number, _ := strconv.Atoi(s)
+	return number
+}
+
+// Replace underscore to slash.
+func ChangeUnderscoreToSlash(s string) string {
+	return strings.Replace(s, "_", "/", 1)
 }
 
 // AddDefaultData adds data for all templates.

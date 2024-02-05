@@ -530,33 +530,60 @@ func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 
 // AdminAllReservations shows all reservations in admin tool.
 func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request) {
-	reservations, err := m.DB.AllReservations()
+	page, err := strconv.Atoi(chi.URLParam(r, "page"))
+	if page == 0 || err != nil {
+		page = 1
+	}
+	limitPerPage := 5
+	result, err := m.DB.AllReservationsPagination(page, limitPerPage)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 	data := make(map[string]interface{})
-	data["reservations"] = reservations
+	data["reservations"] = result.Items.([]models.Reservation)
+	stringMap := make(map[string]string)
+	stringMap["current_page"] = strconv.Itoa(result.CurrentPage)
+	stringMap["total_page"] = strconv.Itoa(result.TotalPage)
+	stringMap["limit_per_page"] = strconv.Itoa(result.LimitPerPage)
+	stringMap["total_rows"] = strconv.Itoa(result.TotalRows)
+	stringMap["total_items"] = strconv.Itoa(result.TotalItems)
 	err = render.Template(w, r, "admin-all-reservations.page.html", &models.TemplateData{
-		Data: data,
+		Data:      data,
+		StringMap: stringMap,
 	})
 	if err != nil {
-		fmt.Println(err)
+		m.App.ErrorLog.Println(err)
 	}
 }
 
 // AllNewReservations shows all new reservations in admin tool.
 func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request) {
-	reservations, err := m.DB.AllNewReservations()
+	page, err := strconv.Atoi(chi.URLParam(r, "page"))
+	if page == 0 || err != nil {
+		page = 1
+	}
+	limitPerPage := 5
+	result, err := m.DB.AllNewReservationsPagination(page, limitPerPage)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 	data := make(map[string]interface{})
-	data["reservations"] = reservations
-	render.Template(w, r, "admin-new-reservations.page.html", &models.TemplateData{
-		Data: data,
+	data["reservations"] = result.Items.([]models.Reservation)
+	stringMap := make(map[string]string)
+	stringMap["current_page"] = strconv.Itoa(result.CurrentPage)
+	stringMap["total_page"] = strconv.Itoa(result.TotalPage)
+	stringMap["limit_per_page"] = strconv.Itoa(result.LimitPerPage)
+	stringMap["total_rows"] = strconv.Itoa(result.TotalRows)
+	stringMap["total_items"] = strconv.Itoa(result.TotalItems)
+	err = render.Template(w, r, "admin-new-reservations.page.html", &models.TemplateData{
+		Data:      data,
+		StringMap: stringMap,
 	})
+	if err != nil {
+		m.App.ErrorLog.Println(err)
+	}
 }
 
 func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request) {
@@ -608,6 +635,8 @@ func (m *Repository) AdminPostShowReservation(w http.ResponseWriter, r *http.Req
 		return
 	}
 	src := exploded[3]
+	src = render.ChangeUnderscoreToSlash(src)
+
 	stringMap := make(map[string]string)
 	stringMap["src"] = src
 
@@ -737,7 +766,10 @@ func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Re
 // AdminProcessReservation marks a reservation as processed.
 func (m *Repository) AdminProcessReservation(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
+
 	src := chi.URLParam(r, "src")
+	src = render.ChangeUnderscoreToSlash(src)
+
 	err := m.DB.UpdateProcessedForReservation(id, 1)
 	if err != nil {
 		helpers.ServerError(w, err)
@@ -758,7 +790,10 @@ func (m *Repository) AdminProcessReservation(w http.ResponseWriter, r *http.Requ
 // AdminDeleteReservation deletes a reservation
 func (m *Repository) AdminDeleteReservation(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
+
 	src := chi.URLParam(r, "src")
+	src = render.ChangeUnderscoreToSlash(src)
+
 	err := m.DB.DeleteReservation(id)
 	if err != nil {
 		helpers.ServerError(w, err)

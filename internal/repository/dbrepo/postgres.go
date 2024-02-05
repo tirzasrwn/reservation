@@ -3,6 +3,7 @@ package dbrepo
 import (
 	"context"
 	"errors"
+	"math"
 	"time"
 
 	"github.com/tirzasrwn/reservation/internal/models"
@@ -467,4 +468,182 @@ func (m *postgresDBRepo) DeleteBlockByID(id int) error {
 		return err
 	}
 	return nil
+}
+
+func (m *postgresDBRepo) CountAllReservations() (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select count(id) from reservations`
+	row := m.DB.QueryRowContext(ctx, query)
+
+	result := 0
+	err := row.Scan(
+		&result,
+	)
+	if err != nil {
+		return 0, err
+	}
+	return result, nil
+}
+
+// AllReservation returs a slice of all reservations
+func (m *postgresDBRepo) AllReservationsPagination(page, limitPerPage int) (models.Pagination, error) {
+	var p models.Pagination
+	p.CurrentPage = page
+	p.LimitPerPage = limitPerPage
+
+	count, err := m.CountAllReservations()
+	if err != nil {
+		return p, err
+	}
+	p.TotalItems = count
+	offset := (p.CurrentPage - 1) * p.LimitPerPage
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var reservations []models.Reservation
+
+	query := `
+		select r.id, r.first_name, r.last_name, r.email, r.phone, r.start_date, 
+		r.end_date, r.room_id, r.created_at, r.updated_at, r.processed,
+		rm.id, rm.room_name
+		from reservations r
+		left join rooms rm on (r.room_id = rm.id)
+		order by r.start_date asc
+    limit $1
+    offset $2
+  `
+
+	rows, err := m.DB.QueryContext(ctx, query, p.LimitPerPage, offset)
+	if err != nil {
+		return p, err
+	}
+	defer rows.Close()
+
+	countRows := 0
+	for rows.Next() {
+		countRows++
+		var i models.Reservation
+		err := rows.Scan(
+			&i.ID,
+			&i.FirstName,
+			&i.LastName,
+			&i.Email,
+			&i.Phone,
+			&i.StartDate,
+			&i.EndDate,
+			&i.RoomID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Processed,
+			&i.Room.ID,
+			&i.Room.RoomName,
+		)
+		if err != nil {
+			return p, err
+		}
+		reservations = append(reservations, i)
+	}
+
+	if err = rows.Err(); err != nil {
+		return p, err
+	}
+
+	p.Items = reservations
+	p.TotalPage = int(math.Ceil(float64(p.TotalItems) / float64(p.LimitPerPage)))
+	p.TotalRows = countRows
+
+	return p, nil
+}
+
+// CountAllNewReservations returns the number of new reservations.
+func (m *postgresDBRepo) CountAllNewReservations() (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `select count(id) from reservations where processed = 0`
+	row := m.DB.QueryRowContext(ctx, query)
+
+	result := 0
+	err := row.Scan(
+		&result,
+	)
+	if err != nil {
+		return 0, err
+	}
+	return result, nil
+}
+
+// AllNewReservationsPagination returns pagination for all new reservations.
+func (m *postgresDBRepo) AllNewReservationsPagination(page, limitPerPage int) (models.Pagination, error) {
+	var p models.Pagination
+	p.CurrentPage = page
+	p.LimitPerPage = limitPerPage
+
+	count, err := m.CountAllNewReservations()
+	if err != nil {
+		return p, err
+	}
+	p.TotalItems = count
+	offset := (p.CurrentPage - 1) * p.LimitPerPage
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var reservations []models.Reservation
+
+	query := `
+		select r.id, r.first_name, r.last_name, r.email, r.phone, r.start_date, 
+		r.end_date, r.room_id, r.created_at, r.updated_at, r.processed,
+		rm.id, rm.room_name
+		from reservations r
+		left join rooms rm on (r.room_id = rm.id)
+    where processed = 0
+		order by r.start_date asc
+    limit $1
+    offset $2
+  `
+
+	rows, err := m.DB.QueryContext(ctx, query, p.LimitPerPage, offset)
+	if err != nil {
+		return p, err
+	}
+	defer rows.Close()
+
+	countRows := 0
+	for rows.Next() {
+		countRows++
+		var i models.Reservation
+		err := rows.Scan(
+			&i.ID,
+			&i.FirstName,
+			&i.LastName,
+			&i.Email,
+			&i.Phone,
+			&i.StartDate,
+			&i.EndDate,
+			&i.RoomID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Processed,
+			&i.Room.ID,
+			&i.Room.RoomName,
+		)
+		if err != nil {
+			return p, err
+		}
+		reservations = append(reservations, i)
+	}
+
+	if err = rows.Err(); err != nil {
+		return p, err
+	}
+
+	p.Items = reservations
+	p.TotalPage = int(math.Ceil(float64(p.TotalItems) / float64(p.LimitPerPage)))
+	p.TotalRows = countRows
+
+	return p, nil
 }

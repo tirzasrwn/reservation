@@ -71,3 +71,12 @@ type MailData struct {
 	Content  string
 	Template string
 }
+
+type Pagination struct {
+	LimitPerPage int         `json:"limit_per_page"`
+	CurrentPage  int         `json:"current_page"`
+	TotalPage    int         `json:"total_page"`
+	TotalRows    int         `json:"total_rows"`
+	TotalItems   int         `json:"total_items"`
+	Items        interface{} `json:"items"`
+}

@@ -27,10 +27,14 @@ var (
 )
 
 var functions = template.FuncMap{
-	"humanDate":  render.HumanDate,
-	"formatDate": render.FormatDate,
-	"iterate":    render.Iterate,
-	"add":        render.Add,
+	"humanDate":               render.HumanDate,
+	"formatDate":              render.FormatDate,
+	"iterate":                 render.Iterate,
+	"add":                     render.Add,
+	"stringNumberIterate":     render.StringNumberIterate,
+	"stringToInt":             render.StringToInt,
+	"subtract":                render.Subtract,
+	"changeUnderscoreToSlash": render.ChangeUnderscoreToSlash,
 }
 
 func TestMain(m *testing.M) {

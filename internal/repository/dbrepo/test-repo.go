@@ -197,3 +197,24 @@ func (m *testDBRepo) InsertBlockForRoom(id int, startDate time.Time) error {
 func (m *testDBRepo) DeleteBlockByID(id int) error {
 	return nil
 }
+
+func (m *testDBRepo) CountAllReservations() (int, error) {
+	return 1, nil
+}
+
+// AllReservation returs a slice of all reservations
+func (m *testDBRepo) AllReservationsPagination(page, limitPerPage int) (models.Pagination, error) {
+	var p models.Pagination
+	return p, nil
+}
+
+// CountAllNewReservations returns the number of new reservations.
+func (m *testDBRepo) CountAllNewReservations() (int, error) {
+	return 1, nil
+}
+
+// AllNewReservationsPagination returns pagination for all new reservations.
+func (m *testDBRepo) AllNewReservationsPagination(page, limitPerPage int) (models.Pagination, error) {
+	var p models.Pagination
+	return p, nil
+}
